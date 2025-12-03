@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exstasy Store & OSINT</title>
+    <!-- Подключаем Telegram WebApp скрипт -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем Tailwind CSS для красоты -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Настройка темы под Telegram -->
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #171717);
+            color: var(--tg-theme-text-color, #ffffff);
+        }
+        .card {
+            background-color: var(--tg-theme-secondary-bg-color, #262626);
+        }
+        .btn-primary {
+            background-color: var(--tg-theme-button-color, #3b82f6);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+        /* Анимация нажатия */
+        .active-press:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen pb-20">
+
+    <!-- Заголовок -->
+    <div class="p-4 text-center font-bold text-xl border-b border-gray-700">
+        💎 EXSTASY MENU
+    </div>
+
+    <!-- Навигация (Табы) -->
+    <div class="flex justify-center mt-4 space-x-2 px-4">
+        <button onclick="switchTab('shop')" id="btn-shop" class="flex-1 py-2 rounded-lg font-medium bg-blue-600 text-white transition active-press">
+            🛒 Магазин
+        </button>
+        <button onclick="switchTab('osint')" id="btn-osint" class="flex-1 py-2 rounded-lg font-medium bg-gray-700 text-gray-300 transition active-press">
+            🕵️ Пробив
+        </button>
+    </div>
+
+    <!-- СЕКЦИЯ МАГАЗИНА -->
+    <div id="shop-section" class="p-4 grid grid-cols-2 gap-3 mt-2">
+        <!-- Товар 1 -->
+        <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
+            <div class="h-20 w-20 bg-blue-900 rounded-full flex items-center justify-center text-3xl mb-2">🇷🇺</div>
+            <h3 class="font-bold text-sm">RU Новорег</h3>
+            <p class="text-xs opacity-70 mb-2">Чистый, отлега 0</p>
+            <div class="font-bold text-lg mb-2">100₽</div>
+            <button onclick="buyItem('ru_novoreg', 100)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
+                Купить
+            </button>
+        </div>
+
+        <!-- Товар 2 -->
+        <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
+            <div class="h-20 w-20 bg-yellow-600 rounded-full flex items-center justify-center text-3xl mb-2">🇺🇸</div>
+            <h3 class="font-bold text-sm">US Отлега</h3>
+            <p class="text-xs opacity-70 mb-2">1+ год, траст</p>
+            <div class="font-bold text-lg mb-2">250₽</div>
+            <button onclick="buyItem('us_aged', 250)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
+                Купить
+            </button>
+        </div>
+
+        <!-- Товар 3 (Indonesia) -->
+        <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
+            <div class="h-20 w-20 bg-red-800 rounded-full flex items-center justify-center text-3xl mb-2">🇮🇩</div>
+            <h3 class="font-bold text-sm">ID Физ</h3>
+            <p class="text-xs opacity-70 mb-2">Физическая SIM</p>
+            <div class="font-bold text-lg mb-2">180₽</div>
+            <button onclick="buyItem('id_phys', 180)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
+                Купить
+            </button>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ ПРОБИВА (Скрыта по умолчанию) -->
+    <div id="osint-section" class="hidden p-4 mt-2">
+        <div class="card p-5 rounded-xl shadow-lg">
+            <h2 class="text-lg font-bold mb-4">🔎 OSINT Инструменты</h2>
+
+            <label class="block text-sm mb-2 opacity-80">Введите данные (Номер / ID / IP):</label>
+            <input type="text" id="osint-input" placeholder="+7999..." class="w-full p-3 rounded-lg bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500 mb-4 text-white">
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="sendOsint('phone')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">📞 Телефон</button>
+                <button onclick="sendOsint('ip')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">🌐 IP</button>
+                <button onclick="sendOsint('username')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">👤 Username</button>
+                <button onclick="sendOsint('email')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">📧 Email</button>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center text-xs opacity-50">
+            Результат будет отправлен ботом в чат.
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Раскрыть на весь экран
+
+        // Переключение вкладок
+        function switchTab(tab) {
+            const shopBtn = document.getElementById('btn-shop');
+            const osintBtn = document.getElementById('btn-osint');
+            const shopSec = document.getElementById('shop-section');
+            const osintSec = document.getElementById('osint-section');
+
+            if (tab === 'shop') {
+                shopSec.classList.remove('hidden');
+                osintSec.classList.add('hidden');
+                shopBtn.classList.add('bg-blue-600', 'text-white');
+                shopBtn.classList.remove('bg-gray-700', 'text-gray-300');
+                osintBtn.classList.remove('bg-blue-600', 'text-white');
+                osintBtn.classList.add('bg-gray-700', 'text-gray-300');
+            } else {
+                shopSec.classList.add('hidden');
+                osintSec.classList.remove('hidden');
+                osintBtn.classList.add('bg-blue-600', 'text-white');
+                osintBtn.classList.remove('bg-gray-700', 'text-gray-300');
+                shopBtn.classList.remove('bg-blue-600', 'text-white');
+                shopBtn.classList.add('bg-gray-700', 'text-gray-300');
+            }
+        }
+
+        // Логика покупки
+        function buyItem(itemCode, price) {
+            // Вибрация при нажатии (только на мобильных)
+            tg.HapticFeedback.impactOccurred('medium');
+
+            const data = JSON.stringify({
+                action: 'buy',
+                item: itemCode,
+                price: price
+            });
+            // Отправляем данные боту
+            tg.sendData(data);
+        }
+
+        // Логика пробива
+        function sendOsint(type) {
+            const input = document.getElementById('osint-input').value;
+            if (!input) {
+                tg.showAlert("❌ Введите данные для поиска!");
+                return;
+            }
+
+            tg.HapticFeedback.impactOccurred('heavy');
+
+            const data = JSON.stringify({
+                action: 'osint',
+                type: type,
+                query: input
+            });
+            // Отправляем данные боту
+            tg.sendData(data);
+        }
+    </script>
+</body>
+</html>
