@@ -46,38 +46,29 @@
 
     <!-- СЕКЦИЯ МАГАЗИНА -->
     <div id="shop-section" class="p-4 grid grid-cols-2 gap-3 mt-2">
-        <!-- Товар 1 -->
+
+        <!-- ТОВАР 1: Россия -->
         <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
             <div class="h-20 w-20 bg-blue-900 rounded-full flex items-center justify-center text-3xl mb-2">🇷🇺</div>
-            <h3 class="font-bold text-sm">RU Новорег</h3>
-            <p class="text-xs opacity-70 mb-2">Чистый, отлега 0</p>
-            <div class="font-bold text-lg mb-2">100₽</div>
-            <button onclick="buyItem('ru_novoreg', 100)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
-                Купить
+            <h3 class="font-bold text-sm">США  +1</h3>
+            <p class="text-xs opacity-70 mb-2">Аккаунты +1</p>
+            <!-- В функцию buyItem передаем: 'КОД_СТРАНЫ', ЦЕНУ -->
+            <button onclick="buyItem('US', 69)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
+                Купить за 69₽
             </button>
         </div>
 
-        <!-- Товар 2 -->
+        <!-- ТОВАР 2: США (пример) -->
         <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
-            <div class="h-20 w-20 bg-yellow-600 rounded-full flex items-center justify-center text-3xl mb-2">🇺🇸</div>
-            <h3 class="font-bold text-sm">US Отлега</h3>
-            <p class="text-xs opacity-70 mb-2">1+ год, траст</p>
-            <div class="font-bold text-lg mb-2">250₽</div>
-            <button onclick="buyItem('us_aged', 250)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
-                Купить
+            <div class="h-20 w-20 bg-green-800 rounded-full flex items-center justify-center text-3xl mb-2">🇺🇸</div>
+            <h3 class="font-bold text-sm">США (US)</h3>
+            <p class="text-xs opacity-70 mb-2">Аккаунты +1</p>
+            <button onclick="buyItem('US', 100)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
+                Купить за 100 рублей
             </button>
         </div>
 
-        <!-- Товар 3 (Indonesia) -->
-        <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
-            <div class="h-20 w-20 bg-red-800 rounded-full flex items-center justify-center text-3xl mb-2">🇮🇩</div>
-            <h3 class="font-bold text-sm">ID Физ</h3>
-            <p class="text-xs opacity-70 mb-2">Физическая SIM</p>
-            <div class="font-bold text-lg mb-2">180₽</div>
-            <button onclick="buyItem('id_phys', 180)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
-                Купить
-            </button>
-        </div>
+
     </div>
 
     <!-- СЕКЦИЯ ПРОБИВА (Скрыта по умолчанию) -->
