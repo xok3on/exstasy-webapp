@@ -3,82 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exstasy Store & OSINT</title>
-    <!-- Подключаем Telegram WebApp скрипт -->
+    <title>Exstasy Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключаем Tailwind CSS для красоты -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Настройка темы под Telegram -->
     <style>
-        body {
-            background-color: var(--tg-theme-bg-color, #171717);
-            color: var(--tg-theme-text-color, #ffffff);
-        }
-        .card {
-            background-color: var(--tg-theme-secondary-bg-color, #262626);
-        }
-        .btn-primary {
-            background-color: var(--tg-theme-button-color, #3b82f6);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-        /* Анимация нажатия */
-        .active-press:active {
-            transform: scale(0.95);
-        }
+        body { background-color: var(--tg-theme-bg-color, #171717); color: var(--tg-theme-text-color, #ffffff); }
+        .card { background-color: var(--tg-theme-secondary-bg-color, #262626); }
+        .btn-primary { background-color: var(--tg-theme-button-color, #3b82f6); color: var(--tg-theme-button-text-color, #ffffff); }
+        .active-press:active { transform: scale(0.95); transition: transform 0.1s; }
     </style>
 </head>
-<body class="font-sans min-h-screen pb-20">
+<body class="font-sans min-h-screen pb-20 select-none">
 
-    <!-- Заголовок -->
-    <div class="p-4 text-center font-bold text-xl border-b border-gray-700">
-        💎 EXSTASY MENU
-    </div>
+    <div class="p-4 text-center font-bold text-xl border-b border-gray-700">💎 EXSTASY MENU</div>
 
-    <!-- Навигация (Табы) -->
+    <!-- ТАБЫ -->
     <div class="flex justify-center mt-4 space-x-2 px-4">
-        <button onclick="switchTab('shop')" id="btn-shop" class="flex-1 py-2 rounded-lg font-medium bg-blue-600 text-white transition active-press">
-            🛒 Магазин
-        </button>
-        <button onclick="switchTab('osint')" id="btn-osint" class="flex-1 py-2 rounded-lg font-medium bg-gray-700 text-gray-300 transition active-press">
-            🕵️ Пробив
-        </button>
+        <button onclick="switchTab('shop')" id="btn-shop" class="flex-1 py-2 rounded-lg font-medium bg-blue-600 text-white transition">🛒 Магазин</button>
+        <button onclick="switchTab('osint')" id="btn-osint" class="flex-1 py-2 rounded-lg font-medium bg-gray-700 text-gray-300 transition">🕵️ Пробив</button>
     </div>
 
-    <!-- СЕКЦИЯ МАГАЗИНА -->
+    <!-- МАГАЗИН -->
     <div id="shop-section" class="p-4 grid grid-cols-2 gap-3 mt-2">
-
-        <!-- ТОВАР 1: Россия -->
         <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
-            <div class="h-20 w-20 bg-blue-900 rounded-full flex items-center justify-center text-3xl mb-2">🇷🇺</div>
-            <h3 class="font-bold text-sm">США  +1</h3>
-            <p class="text-xs opacity-70 mb-2">Аккаунты +1</p>
-            <!-- В функцию buyItem передаем: 'КОД_СТРАНЫ', ЦЕНУ -->
-            <button onclick="buyItem('US', 69)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
-                Купить за 69₽
-            </button>
+            <div class="text-3xl mb-2">🇷🇺</div>
+            <h3 class="font-bold text-sm">Россия (RU)</h3>
+            <div class="font-bold text-lg mb-2">100₽</div>
+            <button onclick="buyItem('RU', 100)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">Купить</button>
         </div>
-
-        <!-- ТОВАР 2: США (пример) -->
         <div class="card p-3 rounded-xl flex flex-col items-center shadow-lg">
-            <div class="h-20 w-20 bg-green-800 rounded-full flex items-center justify-center text-3xl mb-2">🇺🇸</div>
+            <div class="text-3xl mb-2">🇺🇸</div>
             <h3 class="font-bold text-sm">США (US)</h3>
-            <p class="text-xs opacity-70 mb-2">Аккаунты +1</p>
-            <button onclick="buyItem('US', 100)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">
-                Купить за 100 рублей
-            </button>
+            <div class="font-bold text-lg mb-2">250₽</div>
+            <button onclick="buyItem('US', 250)" class="btn-primary w-full py-2 rounded-lg text-sm font-bold active-press">Купить</button>
         </div>
-
-
     </div>
 
-    <!-- СЕКЦИЯ ПРОБИВА (Скрыта по умолчанию) -->
+    <!-- ПРОБИВ -->
     <div id="osint-section" class="hidden p-4 mt-2">
         <div class="card p-5 rounded-xl shadow-lg">
-            <h2 class="text-lg font-bold mb-4">🔎 OSINT Инструменты</h2>
-
-            <label class="block text-sm mb-2 opacity-80">Введите данные (Номер / ID / IP):</label>
-            <input type="text" id="osint-input" placeholder="+7999..." class="w-full p-3 rounded-lg bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500 mb-4 text-white">
-
+            <h2 class="text-lg font-bold mb-4">🔎 Поиск данных</h2>
+            <input type="text" id="osint-input" placeholder="Введите номер, ID или IP..." class="w-full p-3 rounded-lg bg-black/20 border border-gray-600 focus:outline-none focus:border-blue-500 mb-4 text-white">
             <div class="grid grid-cols-2 gap-2">
                 <button onclick="sendOsint('phone')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">📞 Телефон</button>
                 <button onclick="sendOsint('ip')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">🌐 IP</button>
@@ -86,71 +51,44 @@
                 <button onclick="sendOsint('email')" class="btn-primary py-3 rounded-lg text-sm font-bold active-press">📧 Email</button>
             </div>
         </div>
-
-        <div class="mt-4 text-center text-xs opacity-50">
-            Результат будет отправлен ботом в чат.
-        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Раскрыть на весь экран
+        tg.expand();
 
-        // Переключение вкладок
         function switchTab(tab) {
-            const shopBtn = document.getElementById('btn-shop');
-            const osintBtn = document.getElementById('btn-osint');
-            const shopSec = document.getElementById('shop-section');
-            const osintSec = document.getElementById('osint-section');
+            document.getElementById('shop-section').classList.toggle('hidden', tab !== 'shop');
+            document.getElementById('osint-section').classList.toggle('hidden', tab !== 'osint');
 
-            if (tab === 'shop') {
-                shopSec.classList.remove('hidden');
-                osintSec.classList.add('hidden');
-                shopBtn.classList.add('bg-blue-600', 'text-white');
-                shopBtn.classList.remove('bg-gray-700', 'text-gray-300');
-                osintBtn.classList.remove('bg-blue-600', 'text-white');
-                osintBtn.classList.add('bg-gray-700', 'text-gray-300');
-            } else {
-                shopSec.classList.add('hidden');
-                osintSec.classList.remove('hidden');
-                osintBtn.classList.add('bg-blue-600', 'text-white');
-                osintBtn.classList.remove('bg-gray-700', 'text-gray-300');
-                shopBtn.classList.remove('bg-blue-600', 'text-white');
-                shopBtn.classList.add('bg-gray-700', 'text-gray-300');
-            }
+            document.getElementById('btn-shop').classList.toggle('bg-blue-600', tab === 'shop');
+            document.getElementById('btn-shop').classList.toggle('bg-gray-700', tab !== 'shop');
+
+            document.getElementById('btn-osint').classList.toggle('bg-blue-600', tab === 'osint');
+            document.getElementById('btn-osint').classList.toggle('bg-gray-700', tab === 'shop');
         }
 
-        // Логика покупки
-        function buyItem(itemCode, price) {
-            // Вибрация при нажатии (только на мобильных)
-            tg.HapticFeedback.impactOccurred('medium');
+        function buyItem(item, price) {
+            // ОТЛАДКА: Если это окно не появляется, значит JS не работает
+            // alert("Нажата покупка: " + item);
 
-            const data = JSON.stringify({
-                action: 'buy',
-                item: itemCode,
-                price: price
-            });
-            // Отправляем данные боту
+            const data = JSON.stringify({ action: 'buy', item: item, price: price });
             tg.sendData(data);
+            tg.close(); // Закрываем окно принудительно
         }
 
-        // Логика пробива
         function sendOsint(type) {
-            const input = document.getElementById('osint-input').value;
-            if (!input) {
-                tg.showAlert("❌ Введите данные для поиска!");
+            const val = document.getElementById('osint-input').value;
+            if(!val) {
+                tg.showAlert("❌ Введите данные!");
                 return;
             }
 
-            tg.HapticFeedback.impactOccurred('heavy');
+            // alert("Отправка OSINT: " + type);
 
-            const data = JSON.stringify({
-                action: 'osint',
-                type: type,
-                query: input
-            });
-            // Отправляем данные боту
+            const data = JSON.stringify({ action: 'osint', type: type, query: val });
             tg.sendData(data);
+            tg.close(); // Закрываем окно принудительно
         }
     </script>
 </body>
